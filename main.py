@@ -1,4 +1,4 @@
-# https://neat-python.readthedocs.io/en/latest/xor_example.html
+
 from pong import Game
 import pygame
 import neat
@@ -15,9 +15,7 @@ class PongGame:
         self.right_paddle = self.game.right_paddle
 
     def test_ai(self, net):
-        """
-        Test the AI against a human player by passing a NEAT neural network
-        """
+     
         clock = pygame.time.Clock()
         run = True
         while run:
@@ -48,10 +46,7 @@ class PongGame:
             pygame.display.update()
 
     def train_ai(self, genome1, genome2, config, draw=False):
-        """
-        Train the AI by passing two NEAT neural networks and the NEAt config object.
-        These AI's will play against eachother to determine their fitness.
-        """
+      
         run = True
         start_time = time.time()
 
@@ -84,10 +79,7 @@ class PongGame:
         return False
 
     def move_ai_paddles(self, net1, net2):
-        """
-        Determine where to move the left and the right paddle based on the two 
-        neural networks that control them. 
-        """
+        
         players = [(self.genome1, net1, self.left_paddle, True), (self.genome2, net2, self.right_paddle, False)]
         for (genome, net, paddle, left) in players:
             output = net.activate(
@@ -95,14 +87,14 @@ class PongGame:
             decision = output.index(max(output))
 
             valid = True
-            if decision == 0:  # Don't move
-                genome.fitness -= 0.01  # we want to discourage this
-            elif decision == 1:  # Move up
+            if decision == 0:  
+                genome.fitness -= 0.01  
+            elif decision == 1: 
                 valid = self.game.move_paddle(left=left, up=True)
-            else:  # Move down
+            else:  
                 valid = self.game.move_paddle(left=left, up=False)
 
-            if not valid:  # If the movement makes the paddle go off the screen punish the AI
+            if not valid:  
                 genome.fitness -= 1
 
     def calculate_fitness(self, game_info, duration):
@@ -111,9 +103,7 @@ class PongGame:
 
 
 def eval_genomes(genomes, config):
-    """
-    Run each genome against eachother one time to determine the fitness.
-    """
+    
     width, height = 700, 500
     win = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Pong")
@@ -131,7 +121,7 @@ def eval_genomes(genomes, config):
 
 
 def run_neat(config):
-    #p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-85')
+   #p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-85')
     p = neat.Population(config)
     p.add_reporter(neat.StdOutReporter(True))
     stats = neat.StatisticsReporter()
@@ -163,5 +153,5 @@ if __name__ == '__main__':
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
                          config_path)
 
-    #run_neat(config)
+    run_neat(config)
     test_best_network(config)
